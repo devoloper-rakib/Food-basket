@@ -1,8 +1,10 @@
 import express, { Request, Response } from 'express';
 
+import mongoose from 'mongoose';
 import cors from 'cors';
 import 'dotenv/config';
-import mongoose from 'mongoose';
+
+import myUserRoute from './routes/MyUserRoutes';
 
 // Point : Connect to mongodb server
 mongoose
@@ -12,6 +14,9 @@ mongoose
 const app = express();
 app.use(express.json());
 app.use(cors());
+
+// Point: API ENDPOINT
+app.use('/api/my/user', myUserRoute);
 
 // Point: health check
 app.get('/health', async (req: Request, res: Response) => {

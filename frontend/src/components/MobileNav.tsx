@@ -12,6 +12,8 @@ import { Separator } from './ui/separator';
 import { Button } from './ui/button';
 import MobileNavLinks from './MobileNavLinks';
 
+// TODO : 	{user?.email} Will change to name or something nice in the future
+
 const MobileNav = () => {
 	const { isAuthenticated, loginWithRedirect, user } = useAuth0();
 
