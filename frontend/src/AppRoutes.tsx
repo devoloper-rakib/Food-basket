@@ -16,6 +16,7 @@ const AppRoutes = () => {
 					</Layout>
 				}
 			/>
+
 			<Route path='/auth-callback' element={<AuthCallbackPage />} />
 
 			<Route element={<ProtectedRoute />}>

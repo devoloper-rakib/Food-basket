@@ -1,6 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { useMutation, useQuery } from 'react-query';
-import { Toaster } from '../components/ui/sonner';
 import { toast } from 'sonner';
 import { User } from '../types';
 
@@ -77,7 +76,7 @@ export const useUpdateMyUser = () => {
 	const {
 		mutateAsync: updateUser,
 		isLoading,
-		isError,
+		// isError,
 		isSuccess,
 		error,
 		reset,
