@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
+
 import Layout from './layouts/layout';
 import HomePage from './pages/HomePage';
 import AuthCallbackPage from './pages/AuthCallbackPage';
@@ -11,7 +12,7 @@ const AppRoutes = () => {
 			<Route
 				path='/'
 				element={
-					<Layout showHero>
+					<Layout showHero={true}>
 						<HomePage />
 					</Layout>
 				}
