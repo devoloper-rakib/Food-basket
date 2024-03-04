@@ -6,6 +6,7 @@ import 'dotenv/config';
 import { v2 as cloudinary } from 'cloudinary';
 
 import myUserRoute from './routes/MyUserRoutes';
+import myRestaurantRoute from './routes/MyRestaurantRoute';
 
 // Point : Connect to mongodb server
 mongoose
@@ -25,6 +26,7 @@ app.use(cors());
 
 // Point: API ENDPOINT
 app.use('/api/my/user', myUserRoute);
+app.use('/api/my/restaurant', myRestaurantRoute);
 
 // Point: health check
 app.get('/health', async (req: Request, res: Response) => {
