@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Form } from '../../components/ui/form';
 import DetailsSection from './DetailsSection';
+import { Separator } from '../../components/ui/separator';
+import CuisinesSection from './CuisinesSection';
 
 const formSchema = z.object({
 	restaurantName: z.string({
@@ -63,6 +65,9 @@ const ManageRestaurantForm = ({ onSave, isLoading }: Props) => {
 				className='p-10 space-y-8 rounded-lg bg-gray-50'
 			>
 				<DetailsSection />
+				<Separator />
+				<CuisinesSection />
+				<Separator />
 			</form>
 		</Form>
 	);
