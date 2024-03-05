@@ -9,7 +9,12 @@ import { cuisineList } from '../../config/restaurant-options-config';
 import CuisineCheckbox from './CuisineCheckbox';
 
 const CuisinesSection = () => {
-	const { control } = useFormContext();
+	const {
+		control,
+		formState: { errors },
+	} = useFormContext();
+
+	const isError = errors?.cuisines !== undefined;
 
 	return (
 		<div className='space-y-2'>
@@ -31,10 +36,15 @@ const CuisinesSection = () => {
 									cuisine={cuisineItem}
 									field={field}
 									key={index}
+									isError={isError}
 								/>
 							))}
 						</div>
-						<FormMessage />
+						<FormMessage>
+							{isError && typeof errors?.cuisines === 'string'
+								? errors?.cuisines
+								: ''}
+						</FormMessage>
 					</FormItem>
 				)}
 			/>

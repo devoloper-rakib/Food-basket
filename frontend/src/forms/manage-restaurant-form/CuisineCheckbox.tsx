@@ -5,14 +5,19 @@ import { Checkbox } from '../../components/ui/checkbox';
 type Props = {
 	cuisine: string;
 	field: ControllerRenderProps<FieldValues, 'cuisines'>;
+	isError: boolean;
 };
 
-const CuisineCheckbox = ({ cuisine, field }: Props) => {
+const CuisineCheckbox = ({ cuisine, field, isError }: Props) => {
 	return (
-		<FormItem className='flex flex-row items-center mt-2 space-x-1 space-y-0'>
+		<FormItem
+			className={`flex flex-row items-center mt-2 space-x-1 space-y-0 ${
+				isError ? 'text-red-500' : ''
+			}`}
+		>
 			<FormControl>
 				<Checkbox
-					className='bg-white'
+					className={`bg-white ${isError ? '  border-red-500' : ''}`}
 					checked={field.value.includes(cuisine)}
 					onCheckedChange={(checked) => {
 						if (checked) {
