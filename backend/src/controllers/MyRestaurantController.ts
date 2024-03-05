@@ -5,6 +5,22 @@ import cloudinary from 'cloudinary';
 
 import Restaurant from '../models/restaurant';
 
+// Point: Get single Restaurant
+const getMyRestaurant = async (req: Request, res: Response) => {
+	try {
+		const restaurant = await Restaurant.findOne({ user: req.userId });
+		if (!restaurant) {
+			return res.status(404).json({ message: 'Restaurant not found.' });
+		}
+
+		res.json(restaurant);
+	} catch (error) {
+		console.log('error Fetching restaurant data: ', error);
+		res.status(500).json({ message: 'Error Fetching restaurant data' });
+	}
+};
+
+// Point: create new Restaurant
 const createMyRestaurant = async (req: Request, res: Response) => {
 	try {
 		const existingRestaurant = await Restaurant.findOne({ user: req.userId });
@@ -39,5 +55,6 @@ const createMyRestaurant = async (req: Request, res: Response) => {
 };
 
 export default {
+	getMyRestaurant,
 	createMyRestaurant,
 };
