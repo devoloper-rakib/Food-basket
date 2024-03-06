@@ -1,4 +1,4 @@
-import { Auth0Provider, User } from '@auth0/auth0-react';
+import { Auth0Provider, AppState } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
 
 type Props = {
@@ -17,10 +17,12 @@ const Auth0ProviderWithNavigate = ({ children }: Props) => {
 		throw new Error('unable to initialize auth');
 	}
 
-	const onRedirectCallback = (user?: User) => {
-		console.log('User', user);
-		navigate('/auth-callback');
+	const onRedirectCallback = (appState?: AppState) => {
+		// console.log('User', user);
+		navigate(appState?.returnTo || '/auth-callback');
 	};
+
+	// TODO: will implemented token expiration login
 
 	return (
 		<Auth0Provider
@@ -28,6 +30,7 @@ const Auth0ProviderWithNavigate = ({ children }: Props) => {
 			clientId={clientId}
 			authorizationParams={{ redirect_uri: redirectUri, audience }}
 			onRedirectCallback={onRedirectCallback}
+			cacheLocation='localstorage'
 		>
 			{children}
 		</Auth0Provider>
