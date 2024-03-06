@@ -75,3 +75,48 @@ export const useCreateMyRestaurant = () => {
 
 	return { createRestaurant, isLoading };
 };
+
+// Point: update current user restaurant
+export const useUpdateMyRestaurant = () => {
+	const { getAccessTokenSilently } = useAuth0();
+
+	const updateRestaurantRequest = async (
+		restaurantFormData: FormData,
+	): Promise<Restaurant> => {
+		const accessToken = await getAccessTokenSilently();
+
+		const response = await fetch(`${API_BASE_URL}/api/my/restaurant`, {
+			method: 'PUT',
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+			},
+			body: restaurantFormData,
+		});
+
+		if (!response.ok) {
+			throw new Error('failed to Update restaurant Data');
+		}
+
+		return response.json();
+	};
+
+	const {
+		mutate: updateRestaurant,
+		error,
+		isSuccess,
+		isLoading,
+	} = useMutation(updateRestaurantRequest);
+
+	if (isSuccess) {
+		toast.success('Restaurant Updated Successfully!');
+	}
+
+	if (error) {
+		toast.error('Unable to update Restaurant ');
+	}
+
+	return {
+		updateRestaurant,
+		isLoading,
+	};
+};
