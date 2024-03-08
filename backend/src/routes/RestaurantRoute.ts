@@ -16,4 +16,14 @@ router.get(
 	RestaurantController.searchRestaurant,
 );
 
+// /api/restaurant/:324234dsklfahsd
+router.get(
+	'/:restaurantId',
+	param('restaurantId')
+		.isString()
+		.trim()
+		.notEmpty()
+		.withMessage('RestaurantId parameter must be a valid string'),
+	RestaurantController.getRestaurant,
+);
 export default router;
