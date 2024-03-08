@@ -11,6 +11,8 @@ type Props = {
 	onExpandedClick: () => void;
 };
 
+// TODO: will add a animation where user click the cuisine it will come to first and if the user clicks on the cuisine to unclick this it will goes to there place immediately and check box should be more colorful and more eye catching
+
 const CuisineFilter = ({
 	onChange,
 	isExpanded,
