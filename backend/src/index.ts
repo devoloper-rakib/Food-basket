@@ -8,6 +8,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import myUserRoute from './routes/MyUserRoutes';
 import myRestaurantRoute from './routes/MyRestaurantRoute';
 import restaurantRoute from './routes/RestaurantRoute';
+import orderRoute from './routes/OrderRoute';
 
 // Point : Connect to mongodb server
 mongoose
@@ -29,6 +30,7 @@ app.use(cors());
 app.use('/api/my/user', myUserRoute);
 app.use('/api/my/restaurant', myRestaurantRoute);
 app.use('/api/restaurant', restaurantRoute);
+app.use('/api/order', orderRoute);
 
 // Point: health check
 app.get('/health', async (req: Request, res: Response) => {
