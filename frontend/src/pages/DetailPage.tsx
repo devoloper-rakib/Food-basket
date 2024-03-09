@@ -16,6 +16,8 @@ export type CartItem = {
 	quantity: number;
 };
 
+// TODO: will update add to cart functionality to   increment or decrement the quantity with a button and in menu item will try to added images to it and make the ui more visible and more attractive to the user
+
 const DetailPage = () => {
 	const { restaurantId } = useParams();
 	const { restaurant, isLoading } = useGetRestaurant(restaurantId);
@@ -53,6 +55,16 @@ const DetailPage = () => {
 		});
 	};
 
+	const removeFromCart = (cartItem: CartItem) => {
+		setCartItems((prevCartItems) => {
+			const updatedCartItems = prevCartItems.filter(
+				(item) => cartItem._id !== item._id,
+			);
+
+			return updatedCartItems;
+		});
+	};
+
 	if (isLoading || !restaurant) {
 		return <h1>Loading...</h1>;
 	}
@@ -82,7 +94,11 @@ const DetailPage = () => {
 				</div>
 				<div>
 					<Card>
-						<OrderSummary restaurant={restaurant} cartItems={cartItems} />
+						<OrderSummary
+							restaurant={restaurant}
+							cartItems={cartItems}
+							removeFromCart={removeFromCart}
+						/>
 					</Card>
 				</div>
 			</div>
