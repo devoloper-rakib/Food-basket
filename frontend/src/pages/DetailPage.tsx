@@ -8,6 +8,7 @@ import { Card, CardFooter } from '../components/ui/card';
 import OrderSummary from '../components/OrderSummary';
 import { MenuItem } from '../types';
 import CheckoutButton from '../components/CheckoutButton';
+import { UserFormData } from '../forms/user-profile-form/UserProfileForm';
 
 // Point :
 export type CartItem = {
@@ -80,6 +81,10 @@ const DetailPage = () => {
 		});
 	};
 
+	const onCheckout = (userFormData: UserFormData) => {
+		console.log('userFormData', userFormData);
+	};
+
 	if (isLoading || !restaurant) {
 		return <h1>Loading...</h1>;
 	}
@@ -116,7 +121,10 @@ const DetailPage = () => {
 						/>
 
 						<CardFooter>
-							<CheckoutButton />
+							<CheckoutButton
+								disabled={cartItems.length === 0}
+								onCheckout={onCheckout}
+							/>
 						</CardFooter>
 					</Card>
 				</div>
