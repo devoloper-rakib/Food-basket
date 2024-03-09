@@ -3,10 +3,55 @@ import { useGetRestaurant } from '../api/RestaurantApi';
 import { AspectRatio } from '../components/ui/aspect-ratio';
 import RestaurantInfo from '../components/RestaurantInfo';
 import MenuItems from '../components/MenuItem';
+import { useState } from 'react';
+import { Card } from '../components/ui/card';
+import OrderSummary from '../components/OrderSummary';
+import { MenuItem } from '../types';
+
+// Point :
+export type CartItem = {
+	_id: string;
+	name: string;
+	price: number;
+	quantity: number;
+};
 
 const DetailPage = () => {
 	const { restaurantId } = useParams();
 	const { restaurant, isLoading } = useGetRestaurant(restaurantId);
+
+	const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+	const addToCart = (menuItem: MenuItem) => {
+		setCartItems((prevCartItems) => {
+			// Point: 1) check if the item is already in the cart
+			const existingCartItem = prevCartItems.find(
+				(cartItem) => cartItem._id === menuItem._id,
+			);
+
+			// Point: 2) if item is in the cart, update the quantity
+			let updatedCartItems;
+			if (existingCartItem) {
+				updatedCartItems = prevCartItems.map((cartItem) =>
+					cartItem._id === menuItem._id
+						? { ...cartItem, quantity: cartItem.quantity + 1 }
+						: cartItem,
+				);
+			} else {
+				updatedCartItems = [
+					...prevCartItems,
+					{
+						_id: menuItem._id,
+						name: menuItem.name,
+						price: menuItem.price,
+						quantity: 1,
+					},
+				];
+			}
+			// Point: 3) if item is not in the cart , added to the cart as a new item
+			return updatedCartItems;
+		});
+	};
 
 	if (isLoading || !restaurant) {
 		return <h1>Loading...</h1>;
@@ -25,11 +70,20 @@ const DetailPage = () => {
 			<div className='grid md:grid-cols-[4fr_2fr] gap-5 md:px-32'>
 				<div className='flex flex-col gap-4'>
 					<RestaurantInfo restaurant={restaurant} />
-					<span className='text-2xl font-bold tracking-tight'>
-						{restaurant.menuItems.map((menuItem, index) => (
-							<MenuItems menuItem={menuItem} key={index} />
-						))}
-					</span>
+					<h3 className='text-2xl font-bold tracking-tight'>Menu</h3>
+
+					{restaurant.menuItems.map((menuItem, index) => (
+						<MenuItems
+							addToCart={() => addToCart(menuItem)}
+							menuItem={menuItem}
+							key={index}
+						/>
+					))}
+				</div>
+				<div>
+					<Card>
+						<OrderSummary restaurant={restaurant} cartItems={cartItems} />
+					</Card>
 				</div>
 			</div>
 		</div>
