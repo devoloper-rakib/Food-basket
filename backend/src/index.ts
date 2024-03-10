@@ -23,19 +23,23 @@ cloudinary.config({
 });
 
 const app = express();
-app.use(express.json());
 app.use(cors());
+
+// Point: Stripe to validate express data
+app.use('/api/order/checkout/webhook', express.raw({ type: '*/*' }));
+
+app.use(express.json());
+
+// Point: health check
+app.get('/health', async (req: Request, res: Response) => {
+	res.json({ message: ' Health route is available' });
+});
 
 // Point: API ENDPOINT
 app.use('/api/my/user', myUserRoute);
 app.use('/api/my/restaurant', myRestaurantRoute);
 app.use('/api/restaurant', restaurantRoute);
 app.use('/api/order', orderRoute);
-
-// Point: health check
-app.get('/health', async (req: Request, res: Response) => {
-	res.json({ message: ' Health route is available' });
-});
 
 app.listen(7000, () => {
 	console.log(`server listening on localhost:${process.env.PORT || 7000}`);

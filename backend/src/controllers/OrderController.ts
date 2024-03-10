@@ -2,10 +2,12 @@ import { Request, Response } from 'express';
 import Stripe from 'stripe';
 import Restaurant, { MenuItemType } from '../models/restaurant';
 import Order from '../models/order';
+import { send } from 'process';
 
 // Initializing Stripe instance and frontend URL
 const STRIPE = new Stripe(process.env.STRIPE_API_KEY as string);
 const FRONTEND_URL = process.env.FRONTEND_URL as string;
+const STRIPE_ENDPOINT_SECRET = process.env.STRIPE_WEBHOOK_SECRET as string;
 
 // Defining the structure of the request body expected for creating a checkout session
 type CheckoutSessionRequest = {
@@ -26,10 +28,34 @@ type CheckoutSessionRequest = {
 // Point: Stripe web hook handle to work with Stripe CLI
 // / terminal command:: stripe listen --forward-to localhost:7000/api/order/checkout/webhook
 const stripeWebhookHandler = async (req: Request, res: Response) => {
-	console.log('Received Event: ');
-	console.log('--------------------------------');
-	console.log('event: ', req.body);
-	res.send();
+	let event;
+	try {
+		const sig = req.headers['stripe-signature'];
+		event = STRIPE.webhooks.constructEvent(
+			req.body,
+			sig as string,
+			STRIPE_ENDPOINT_SECRET,
+		);
+	} catch (error: any) {
+		console.log('stripe webHook Error : ', error);
+		return res.status(400).send(`Webhook error : ${error.message}`);
+	}
+	if (event.type === 'checkout.session.completed') {
+		const orderSuccess = await Order.findById(
+			event.data.object.metadata?.orderId,
+		);
+
+		if (!orderSuccess) {
+			return res.status(404).json({ message: 'Order not found!' });
+		}
+
+		orderSuccess.totalAmount = event.data.object.amount_total;
+		orderSuccess.status = 'paid';
+
+		await orderSuccess.save();
+	}
+
+	res.status(200).send();
 };
 
 // Point:  Function to create a checkout session
