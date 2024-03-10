@@ -46,7 +46,7 @@ const CheckoutButton = ({ onCheckout, disabled, isLoading }: Props) => {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button disabled={disabled} className='bg-orange-500 flex-1'>
+				<Button disabled={disabled} className='flex-1 bg-orange-500'>
 					Go To Checkout
 				</Button>
 			</DialogTrigger>

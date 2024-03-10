@@ -11,4 +11,7 @@ router.post(
 	OrderController.createCheckoutSession,
 );
 
+// Stripe wevhoook for cli
+router.post('/checkout/webhook', OrderController.stripeWebhookHandler);
+
 export default router;

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import Stripe from 'stripe';
 import Restaurant, { MenuItemType } from '../models/restaurant';
+import Order from '../models/order';
 
 // Initializing Stripe instance and frontend URL
 const STRIPE = new Stripe(process.env.STRIPE_API_KEY as string);
@@ -22,7 +23,16 @@ type CheckoutSessionRequest = {
 	restaurantId: string;
 };
 
-// Function to create a checkout session
+// Point: Stripe web hook handle to work with Stripe CLI
+// / terminal command:: stripe listen --forward-to localhost:7000/api/order/checkout/webhook
+const stripeWebhookHandler = async (req: Request, res: Response) => {
+	console.log('Received Event: ');
+	console.log('--------------------------------');
+	console.log('event: ', req.body);
+	res.send();
+};
+
+// Point:  Function to create a checkout session
 const createCheckoutSession = async (req: Request, res: Response) => {
 	try {
 		// Extracting relevant data from the request body
@@ -36,6 +46,15 @@ const createCheckoutSession = async (req: Request, res: Response) => {
 			throw new Error('Restaurant not found :(');
 		}
 
+		const newOrder = new Order({
+			restaurant: restaurant,
+			user: req.userId,
+			status: 'placed',
+			deliveryDetails: checkoutSessionRequest.deliveryDetails,
+			cartItems: checkoutSessionRequest.cartItems,
+			createdAt: new Date(),
+		});
+
 		// Creating line items for the checkout session based on cart items and menu items
 		const lineItems = createLineItems(
 			checkoutSessionRequest,
@@ -45,7 +64,7 @@ const createCheckoutSession = async (req: Request, res: Response) => {
 		// Creating the checkout session using Stripe API
 		const session = await createSession(
 			lineItems,
-			'TEST_ORDER_ID',
+			newOrder._id.toString(),
 			restaurant.deliveryPrice,
 			restaurant._id.toString(),
 		);
@@ -54,6 +73,7 @@ const createCheckoutSession = async (req: Request, res: Response) => {
 		}
 
 		// Sending the URL of the created session to the client
+		await newOrder.save();
 		res.json({ url: session.url });
 	} catch (error: any) {
 		// Handling errors
@@ -128,4 +148,5 @@ const createSession = async (
 
 export default {
 	createCheckoutSession,
+	stripeWebhookHandler,
 };
