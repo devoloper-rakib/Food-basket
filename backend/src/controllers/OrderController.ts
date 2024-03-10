@@ -25,6 +25,20 @@ type CheckoutSessionRequest = {
 	restaurantId: string;
 };
 
+// Point: Get my orders details
+const getMyOrders = async (req: Request, res: Response) => {
+	try {
+		const orders = await Order.find({ user: req.userId })
+			.populate('restaurant')
+			.populate('user');
+
+		res.json(orders);
+	} catch (error: any) {
+		console.log('error getting orders: ', error);
+		res.status(500).json({ message: 'Something went wrong' });
+	}
+};
+
 // Point: Stripe web hook handle to work with Stripe CLI
 // / terminal command:: stripe listen --forward-to localhost:7000/api/order/checkout/webhook
 const stripeWebhookHandler = async (req: Request, res: Response) => {
@@ -173,6 +187,7 @@ const createSession = async (
 };
 
 export default {
+	getMyOrders,
 	createCheckoutSession,
 	stripeWebhookHandler,
 };

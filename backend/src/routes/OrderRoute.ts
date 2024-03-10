@@ -4,6 +4,9 @@ import OrderController from '../controllers/OrderController';
 
 const router = express.Router();
 
+// Get single order details
+router.get('/', jwtCheck, jwtParse, OrderController.getMyOrders);
+
 router.post(
 	'/checkout/create-checkout-session',
 	jwtCheck,
@@ -11,7 +14,7 @@ router.post(
 	OrderController.createCheckoutSession,
 );
 
-// Stripe wevhoook for cli
+// Stripe webhook for cli
 router.post('/checkout/webhook', OrderController.stripeWebhookHandler);
 
 export default router;
