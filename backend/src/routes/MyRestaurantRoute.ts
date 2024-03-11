@@ -19,7 +19,7 @@ const upload = multer({
 
 // Point: Restaurant Order description
 router.get(
-	'order',
+	'/order',
 	jwtCheck,
 	jwtParse,
 	MyRestaurantController.getMyRestaurantOrders,
