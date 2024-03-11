@@ -17,6 +17,14 @@ const upload = multer({
 	},
 });
 
+// Point: Restaurant Order description
+router.get(
+	'order',
+	jwtCheck,
+	jwtParse,
+	MyRestaurantController.getMyRestaurantOrders,
+);
+
 // /api/my/restaurant
 router.get('/', jwtCheck, jwtParse, MyRestaurantController.getMyRestaurant);
 

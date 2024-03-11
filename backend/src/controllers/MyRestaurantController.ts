@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import cloudinary from 'cloudinary';
 
 import Restaurant from '../models/restaurant';
+import Order from '../models/order';
 
 // Point: Get single Restaurant
 const getMyRestaurant = async (req: Request, res: Response) => {
@@ -77,10 +78,24 @@ const updateMyRestaurant = async (req: Request, res: Response) => {
 		res.status(500).json({ message: 'Something went wrong' });
 	}
 };
-export default {
-	getMyRestaurant,
-	createMyRestaurant,
-	updateMyRestaurant,
+
+// Point:  Restaurant  Order  details;
+const getMyRestaurantOrders = async (req: Request, res: Response) => {
+	try {
+		const restaurant = await Restaurant.findOne({ user: req.userId });
+		if (!restaurant) {
+			return res.status(404).json({ message: 'Restaurant not  found' });
+		}
+
+		const orders = await Order.find({ restaurant: restaurant._id })
+			.populate('restaurant')
+			.populate('user');
+
+		res.json(orders);
+	} catch (error) {
+		console.log('my restaurant orders:', error);
+		res.status(500).json({ message: 'Something went wrong' });
+	}
 };
 
 const uploadImage = async (file: Express.Multer.File) => {
@@ -92,4 +107,11 @@ const uploadImage = async (file: Express.Multer.File) => {
 		folder: 'food-basket',
 	});
 	return uploadResponse.url;
+};
+
+export default {
+	getMyRestaurant,
+	createMyRestaurant,
+	updateMyRestaurant,
+	getMyRestaurantOrders,
 };
