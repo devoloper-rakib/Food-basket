@@ -5,6 +5,11 @@ import { Order, Restaurant } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+type UpdateOrderStatusRequest = {
+	orderId: string;
+	status: string;
+};
+
 // Point : Get single restaurant data
 export const useGetMyRestaurant = () => {
 	const { getAccessTokenSilently } = useAuth0();
@@ -146,4 +151,51 @@ export const useGetMyRestaurantOrders = () => {
 		getMyRestaurantOrdersRequest,
 	);
 	return { orders, isLoading };
+};
+
+// Point: update restaurant order status
+export const useUpdateMyRestaurantOrder = () => {
+	const { getAccessTokenSilently } = useAuth0();
+
+	const updateMyRestaurantOrder = async (
+		updateStatusOrderRequest: UpdateOrderStatusRequest,
+	) => {
+		const accessToken = await getAccessTokenSilently();
+
+		const response = await fetch(
+			`${API_BASE_URL}/api/my/restaurant/order/${updateStatusOrderRequest.orderId}/status`,
+			{
+				method: 'PATCH',
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ status: updateStatusOrderRequest.status }),
+			},
+		);
+
+		if (!response.ok) {
+			throw new Error('Failed to update order status');
+		}
+
+		return response.json();
+	};
+
+	const {
+		mutateAsync: updateRestaurantStatus,
+		isLoading,
+		isError,
+		isSuccess,
+		reset,
+	} = useMutation(updateMyRestaurantOrder);
+
+	if (isSuccess) {
+		toast.success('Order updated successfully');
+	}
+
+	if (isError) {
+		toast.error('Unable to update order');
+		reset();
+	}
+	return { updateMyRestaurantOrder, isLoading };
 };
