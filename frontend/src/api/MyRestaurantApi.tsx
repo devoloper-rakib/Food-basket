@@ -197,5 +197,6 @@ export const useUpdateMyRestaurantOrder = () => {
 		toast.error('Unable to update order');
 		reset();
 	}
-	return { updateMyRestaurantOrder, isLoading };
+
+	return { updateRestaurantStatus, isLoading };
 };
