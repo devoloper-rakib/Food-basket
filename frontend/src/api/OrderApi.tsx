@@ -5,6 +5,8 @@ import { Order } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+// TODO: WIll auto refresh every page  with api fetching
+
 type CheckoutSessionRequest = {
 	cartItems: {
 		menuItemId: string;
