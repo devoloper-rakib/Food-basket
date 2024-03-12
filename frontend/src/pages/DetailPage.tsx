@@ -10,6 +10,7 @@ import { MenuItem } from '../types';
 import CheckoutButton from '../components/CheckoutButton';
 import { UserFormData } from '../forms/user-profile-form/UserProfileForm';
 import { useCreateCheckoutSession } from '../api/OrderApi';
+import LoaderAnimation from '../components/LoaderAnimation';
 
 // Point :
 export type CartItem = {
@@ -110,7 +111,7 @@ const DetailPage = () => {
 	};
 
 	if (isLoading || !restaurant) {
-		return <h1>Loading...</h1>;
+		return <LoaderAnimation />;
 	}
 
 	return (
