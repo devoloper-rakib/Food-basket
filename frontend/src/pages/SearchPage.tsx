@@ -7,6 +7,7 @@ import SearchBar, { SearchForm } from '../components/SearchBar';
 import PaginationSelector from '../components/PaginationSelector';
 import CuisineFilter from '../components/CuisineFilter';
 import SortOptionDropdown from '../components/SortOptionDropdown';
+import LoaderAnimation from '../components/LoaderAnimation';
 
 export type SearchState = {
 	searchQuery: string;
@@ -69,7 +70,7 @@ const SearchPage = () => {
 		}));
 	};
 
-	if (isLoading) return <h1>Loading...</h1>;
+	if (isLoading) return <LoaderAnimation />;
 
 	if (!results?.data || !city) return <span>No results found</span>;
 

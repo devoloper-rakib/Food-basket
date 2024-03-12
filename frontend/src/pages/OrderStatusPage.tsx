@@ -1,4 +1,5 @@
 import { useGetMyOrders } from '../api/OrderApi';
+import LoaderAnimation from '../components/LoaderAnimation';
 import OrderStatusDetail from '../components/OrderStatusDetail';
 import OrderStatusHeader from '../components/OrderStatusHeader';
 import { AspectRatio } from '../components/ui/aspect-ratio';
@@ -6,9 +7,7 @@ import { AspectRatio } from '../components/ui/aspect-ratio';
 const OrderStatusPage = () => {
 	const { orders, isLoading } = useGetMyOrders();
 
-	if (isLoading) {
-		return 'loading...';
-	}
+	if (isLoading) return <LoaderAnimation />;
 
 	if (!orders || orders.length === 0) {
 		return 'No orders found';
