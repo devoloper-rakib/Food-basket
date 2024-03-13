@@ -77,15 +77,32 @@
 
 /* Loader animation */
 .loader {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+	/* display: flex; */
+	/* align-items: center; */
+	/* justify-content: center; */
 	/* margin-top: 15rem; */
 	/* position: absolute; */
 	/* bottom: 50%; */
 	/* left: 40%; */
-	transform: translateY(776%);
+	/* transform: translate(0%, 776%); */
+	position: absolute;
+	top: 46%;
+	left: 46%;
 }
+@media only screen and (max-width: 768px) {
+	.loader {
+		/* transform: translate(6%, 776%); */
+		left: 40%;
+	}
+}
+
+@media only screen and (max-width: 500px) {
+	.loader {
+		/* transform: translate(6%, 776%); */
+		left: 32%;
+	}
+}
+
 .panWrapper {
 	width: 200px;
 	height: fit-content;
