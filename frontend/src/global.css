@@ -81,9 +81,10 @@
 	align-items: center;
 	justify-content: center;
 	/* margin-top: 15rem; */
-	position: absolute;
-	bottom: 50%;
-	right: 45%;
+	/* position: absolute; */
+	/* bottom: 50%; */
+	/* left: 40%; */
+	transform: translateY(776%);
 }
 .panWrapper {
 	width: 200px;

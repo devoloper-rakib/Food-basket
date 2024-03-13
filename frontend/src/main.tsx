@@ -11,7 +11,7 @@ import { Toaster } from './components/ui/sonner';
 const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
-			refetchOnWindowFocus: false, // will set true on production mode
+			refetchOnWindowFocus: false, // TODO will set true on production mode
 		},
 	},
 });
