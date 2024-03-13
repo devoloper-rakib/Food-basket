@@ -2,8 +2,7 @@ import { useEffect, useRef } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { DeleteIcon, Search } from 'lucide-react';
-import { useMediaQuery } from 'react-responsive';
+import { Search } from 'lucide-react';
 
 import { Form, FormControl, FormField, FormItem } from './ui/form';
 import { Input } from './ui/input';
@@ -53,17 +52,19 @@ const SearchBar = ({ onSubmit, onReset, placeHolder, searchQuery }: Props) => {
 		}
 	};
 
-	const isLargeScreen = useMediaQuery({ minWidth: 768 });
-	const isMobileScreen = useMediaQuery({ maxWidth: 767 });
-
 	return (
 		<Form {...form}>
 			<form
 				onSubmit={form.handleSubmit(onSubmit)}
-				className={`flex items-center gap-3 justify-between flex-row border-2 rounded-full p-3 ${
+				className={`flex items-center  gap-3 justify-between flex-row border-2 rounded-full p-3  ${
 					form.formState?.errors?.searchQuery && 'border-red-500'
 				}`}
 			>
+				<Search
+					strokeWidth={2.5}
+					size={30}
+					className='hidden ml-1 text-orange-500 md:block'
+				/>
 				<FormField
 					control={form.control}
 					name='searchQuery'
@@ -82,39 +83,19 @@ const SearchBar = ({ onSubmit, onReset, placeHolder, searchQuery }: Props) => {
 					)}
 				/>
 
-				{isLargeScreen && (
-					<Button type='submit' className='bg-orange-500 rounded-full'>
-						Search
-					</Button>
-				)}
+				{/* TODO: will have a condition  to  show reset button when usr type something  */}
+				<Button
+					onClick={handleReset}
+					type='button'
+					variant='outline'
+					className='hidden rounded-full md:block '
+				>
+					Clear
+				</Button>
 
-				{isMobileScreen && (
-					<Button type='submit' className='bg-orange-500 rounded-full'>
-						<Search size={20} strokeWidth={2} className='mr-1' />
-					</Button>
-				)}
-
-				{isLargeScreen && (
-					<Button
-						onClick={handleReset}
-						type='button'
-						variant='outline'
-						className='rounded-full'
-					>
-						Clear
-					</Button>
-				)}
-
-				{isMobileScreen && (
-					<Button
-						onClick={handleReset}
-						type='button'
-						variant='outline'
-						className='rounded-full'
-					>
-						<DeleteIcon size={20} strokeWidth={2} />
-					</Button>
-				)}
+				<Button type='submit' className='bg-orange-500 rounded-full'>
+					Search
+				</Button>
 			</form>
 		</Form>
 	);
